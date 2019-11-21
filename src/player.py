@@ -1,25 +1,25 @@
-from fovPositions import FovPosition
-
-class PositionManager:
-  def __init__(self, x, y):
-    self.x = x
-    self.y = y
+from viewSkill import View
+from positionManager import PositionManager
 
 class Player:
-  fovPos = FovPosition.TOP
 
-  def __init__(self, xStart, yStart):
+  view = View.TOP
+
+  def __init__(self, xStart, yStart, label):
     self.position = PositionManager(xStart, yStart)
+    self.id = id
 
-  def setFovPos(self, newPos):
-    self.fovPos = newPos
+  def setView(self, newView):
+    self.view = newView
 
-  def getBlockDetails(self):
+  def getView(self):
+    return self.view
+
+  def move(self, viewPosition):
     tempPos = PositionManager(self.position.x, self.position.y)
-    tempPos = self.fovPos(tempPos)
-    print(tempPos.y)       
-    
-
-player1 = Player(1,1)
-
-print(player1.getBlockDetails())
+    tempPos = viewPosition.value.function(tempPos)
+    if tempPos.validatePosition():
+      self.position = tempPos
+      return True
+    else:
+      return False
