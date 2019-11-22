@@ -1,14 +1,15 @@
 from block import Block
-from player import Player, PlayerActions
-from viewSkill import View
+from player import Player
+from positions import Positions
 
 class Game:
     def __init__(self, row, column):
         self.row = row
         self.column = column
         self.gameBoard = self.generateBoard()
-        self.player1 = Player(0, 0, "player 1")
-        self.setPlayerOnBoard(self.player1.position.x, self.player1.position.y, self.player1)
+        self.seeker = Player(0, 0, "seeker")
+        self.setPlayerOnBoard(self.seeker.position.x, self.seeker.position.y, self.seeker)
+        self.players = [self.seeker]
         
  
     def setPlayerOnBoard(self, newRow, newColumn, player):
@@ -19,17 +20,16 @@ class Game:
 
     def movePlayer(self, newPosition, player):
         tempPlayer = Player(player.position.x, player.position.y, None)
-        if player.performAction(newPosition, self.row, self.column, PlayerActions.MOVE):
+        newPlayerPosition = player.performAction(newPosition, self.row, self.column, player.position)
+
+        if newPlayerPosition != False:
             self.setPlayerOnBoard(tempPlayer.position.y, tempPlayer.position.x, None)
-            self.setPlayerOnBoard(player.position.y, player.position.x, player)
+            self.setPlayerOnBoard(newPlayerPosition.y, newPlayerPosition.x, player)
         
     def playerViewBlock(self, player):
-        tempPlayer = Player(player.position.x, player.position.y, None)
-        tempPlayer.view = player.view
-        
-        if player.performAction(tempPlayer.view, self.row, self.column, PlayerActions.MOVE):
-            playerView = tempPlayer.view.value.function(tempPlayer.position)
-            return self.getBlock(playerView.y, playerView.x).id
+        viewPosition = player.performAction(player.view, self.row, self.column, player.position)
+        if viewPosition != False:
+            return self.getBlock(viewPosition.y, viewPosition.x).id
 
     def generateBoard(self):
         id = 0
@@ -44,11 +44,15 @@ class Game:
 
     
 
-game = Game(4,2)
+game = Game(4,3)
 
-game.movePlayer(View.BOTTOM, game.player1)
-game.movePlayer(View.RIGHT, game.player1)
-game.movePlayer(View.BOTTOM, game.player1)
-game.player1.view = View.LEFT
-print('player1 view:', game.player1.view, game.playerViewBlock(game.player1))
-print(game.player1.position.x, game.player1.position.y)
+#game.movePlayer(Positions.BOTTOM, game.players[0])
+game.movePlayer(Positions.RIGHT, game.players[0])
+#game.movePlayer(Positions.RIGHT, game.players[0])
+#game.movePlayer(Positions.BOTTOM, game.players[0])
+#game.players[0].view = Positions.RIGHT
+#print('players[0] view:', game.players[0].view, game.playerViewBlock(game.players[0]))
+print(game.getBlock(0, 1).player)
+print('x', game.players[0].position.x, 'y', game.players[0].position.y)
+
+
