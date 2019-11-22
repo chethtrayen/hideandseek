@@ -3,8 +3,8 @@ class PositionManager:
     self.x = x
     self.y = y
   
-  def validatePosition(self):
-    if self.x < 0 or self.y < 0 :
-      return False
-    else:
+  def validatePosition(self, maxRow, maxColumn):
+    if (self.x >= 0) and (self.y >= 0) and (self.x <= maxColumn-1) and (self.y <= maxRow-1):
       return True
+    else:
+      return False
