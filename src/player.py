@@ -1,20 +1,21 @@
-from positions import Positions
+from positions import Position, Positioning
 from positionManager import PositionManager
-from enum import Enum
 
 class Player:
-  view = Positions.TOP
+  view = Position.factory(Positioning.TOP)
 
-  def __init__(self, xStart, yStart, label):
+  def __init__(self, xStart, yStart, id):
     self.position = PositionManager(xStart, yStart)
     self.id = id
 
-  @staticmethod
-  def performAction(newPosition, maxRow, maxColumn, playerPosition):
-    tempPos = newPosition.value.function(playerPosition)
-  
-    if tempPos.validatePosition(tempPos, maxRow, maxColumn):
+  def performAction(self, newPosition, maxRow, maxColumn):
+    tempPos = PositionManager(self.position.x, self.position.y)
+    position = Position.factory(newPosition)
+    tempPos = position.update(tempPos)
+
+    if tempPos.validatePosition(maxRow, maxColumn):
       return tempPos
     else:
       return False
+
 

@@ -1,32 +1,53 @@
 from enum import Enum
 
-def topView(playerPosition):
-  playerPosition.y -= 1
-  return playerPosition
-
-def bottomView(playerPosition):
-  playerPosition.y += 1
-  return playerPosition
-
-def leftView(playerPosition):
-  playerPosition.x -= 1
-  return playerPosition
+class Positioning(Enum):
+  TOP = 'top'
+  BOTTOM = 'bottom'
+  RIGHT = 'right'
+  LEFT = 'left'
 
 
-def rightView(playerPosition):
-  playerPosition.x += 1
-  return playerPosition
+class Top():
+  label = Positioning.TOP
+  @staticmethod
+  def update(position):
+      position.y -= 1
+      return position
 
+class Bottom():
+  label = Positioning.BOTTOM
+  @staticmethod
+  def update(position):
+      position.y += 1
+      return position
+
+class Right():
+  label = Positioning.RIGHT
+  @staticmethod
+  def update(position):
+      position.x += 1
+      return position
+
+class Left():
+  label = Positioning.LEFT
+  @staticmethod
+  def update(position):
+      position.x -= 1
+      return position
 
 class Position:
-  def __init__(self, label, function):
-    self.label = label
-    self.function = function
+  @staticmethod
+  def factory(position):
+    if position == Positioning.TOP:
+      return Top()
+    if position == Positioning.BOTTOM:
+      return Bottom()
+    if position == Positioning.RIGHT:
+      return Right()
+    if position == Positioning.LEFT:
+      return Left()
+    else:
+      return Top()
 
-class Positions(Enum):
-  TOP = Position("top", topView)
-  BOTTOM = Position("bottom", bottomView)
-  LEFT = Position("left", leftView)
-  RIGHT = Position("right", rightView)
 
 
